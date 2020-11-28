@@ -33,6 +33,10 @@ public class EmployeePayrollData {
 //		this.salary = empPayrollDTO.salary;
 //	}
 
+	public EmployeePayrollData(int i, EmployeePayrollDTO empPayrollDTO) {
+		// TODO Auto-generated constructor stub
+	}
+
 	public Integer getEmployeeId() {
 		return employeeId;
 	}
