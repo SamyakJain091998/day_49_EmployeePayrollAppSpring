@@ -1,9 +1,19 @@
 package com.bridgelabz.employeepayrollapp.model;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+
 import com.bridgelabz.employeepayrollapp.dto.*;
 
+@Entity
 public class EmployeePayrollData {
-	private int employeeId;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	private Integer employeeId;
+
 	private String name;
 	private long salary;
 
@@ -11,17 +21,23 @@ public class EmployeePayrollData {
 
 	}
 
-	public EmployeePayrollData(int id, EmployeePayrollDTO empPayrollDTO) {
-		this.employeeId = id;
-		this.name = empPayrollDTO.name;
-		this.salary = empPayrollDTO.salary;
+	public EmployeePayrollData(String name, long salary) {
+		this.name = name;
+		this.salary = salary;
 	}
+	
+	
+//	public EmployeePayrollData(Integer id, EmployeePayrollDTO empPayrollDTO) {
+//		this.employeeId = id;
+//		this.name = empPayrollDTO.name;
+//		this.salary = empPayrollDTO.salary;
+//	}
 
-	public int getEmployeeId() {
+	public Integer getEmployeeId() {
 		return employeeId;
 	}
 
-	public void setEmployeeId(int employeeId) {
+	public void setEmployeeId(Integer employeeId) {
 		this.employeeId = employeeId;
 	}
 
