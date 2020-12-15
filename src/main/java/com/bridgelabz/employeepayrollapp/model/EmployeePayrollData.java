@@ -4,6 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.Pattern;
 
 import com.bridgelabz.employeepayrollapp.dto.*;
 
@@ -25,16 +27,12 @@ public class EmployeePayrollData {
 		this.name = name;
 		this.salary = salary;
 	}
-	
-	
-//	public EmployeePayrollData(Integer id, EmployeePayrollDTO empPayrollDTO) {
-//		this.employeeId = id;
-//		this.name = empPayrollDTO.name;
-//		this.salary = empPayrollDTO.salary;
-//	}
 
 	public EmployeePayrollData(int i, EmployeePayrollDTO empPayrollDTO) {
 		// TODO Auto-generated constructor stub
+		this.name = empPayrollDTO.name;
+		this.salary = empPayrollDTO.salary;
+
 	}
 
 	public Integer getEmployeeId() {

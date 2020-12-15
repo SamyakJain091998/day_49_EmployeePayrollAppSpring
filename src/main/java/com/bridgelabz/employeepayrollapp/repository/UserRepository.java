@@ -8,5 +8,5 @@ import com.bridgelabz.employeepayrollapp.model.*;
 // CRUD refers Create, Read, Update, Delete
 
 public interface UserRepository extends CrudRepository<EmployeePayrollData, Integer> {
-
+	
 }

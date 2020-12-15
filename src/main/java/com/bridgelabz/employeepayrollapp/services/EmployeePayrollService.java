@@ -5,10 +5,11 @@ import java.util.*;
 import org.springframework.stereotype.Service;
 
 import com.bridgelabz.employeepayrollapp.dto.*;
+import com.bridgelabz.employeepayrollapp.exceptions.EmployeePayrollException;
 import com.bridgelabz.employeepayrollapp.model.*;
 
 @Service
-public class EmployeePayrollService implements IEmployeePayrollService {
+public class EmployeePayrollService implements IEmployeePayrollService{
 
 	private List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 
@@ -18,11 +19,13 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 		return employeePayrollList;
 	}
 
-	public EmployeePayrollData getEmployeePayrollDataById(int empId) {
+	public EmployeePayrollData getEmployeePayrollDataById(int empId) throws EmployeePayrollException{
 		// TODO Auto-generated method stub
 //		EmployeePayrollData empPayrollData = null;
 //		empPayrollData = new EmployeePayrollData(1, new EmployeePayrollDTO("Pankaj", 30000));
-		return employeePayrollList.get(empId - 1);
+//		return employeePayrollList.get(empId - 1);
+		return employeePayrollList.stream().filter(empData -> empData.getEmployeeId() == empId).findFirst()
+				.orElseThrow(() -> new EmployeePayrollException("----------EmployeeNotFound!!!----------"));
 	}
 
 	public EmployeePayrollData createEmployeePayrollData(EmployeePayrollDTO empPayrollDTO) {
