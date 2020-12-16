@@ -16,40 +16,57 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class EmployeePayrollService implements IEmployeePayrollService {
 
-	private List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
+	private List<EmployeePayrollData> employeeDataList = new ArrayList<>();
 
-	public List<EmployeePayrollData> getEmployeePayrollData() {
-		return employeePayrollList;
-	}
-
-	public EmployeePayrollData getEmployeePayrollDataById(int empId) throws EmployeePayrollException {
-		return employeePayrollList.stream().filter(empData -> empData.getEmployeeId() == empId).findFirst()
-				.orElseThrow(() -> new EmployeePayrollException("----------EmployeeNotFound!!!----------"));
-	}
+	@Autowired
+	private EmployeeRepository employeeRepository;
 
 	public EmployeePayrollData createEmployeePayrollData(EmployeePayrollDTO empPayrollDTO) {
 		EmployeePayrollData empPayrollData = null;
 		empPayrollData = new EmployeePayrollData(empPayrollDTO);
-		log.debug("Emp Data: ----------> " + empPayrollData.toString());
-		employeePayrollList.add(empPayrollData);
+		empPayrollData = employeeRepository.save(empPayrollData);
+		employeeDataList.add(empPayrollData);
 		return empPayrollData;
 	}
 
-	public EmployeePayrollData updateEmployeePayrollData(int empId, EmployeePayrollDTO empPayrollDTO) {
-		EmployeePayrollData empPayrollData = this.getEmployeePayrollDataById(empId);
-		empPayrollData.setName(empPayrollDTO.name);
-		empPayrollData.setSalary(empPayrollDTO.salary);
-		employeePayrollList.set(empId - 1, empPayrollData);
-		return empPayrollData;
+	@Override
+	public List<EmployeePayrollData> getEmployeePayrollData() {
+		employeeDataList.clear();
+		employeeRepository.findAll().forEach(employee -> employeeDataList.add(employee));
+		return (List<EmployeePayrollData>) employeeRepository.findAll();
 	}
 
-	public void deleteEmployeePayrolllData(int empId) {
-		employeePayrollList.remove(empId - 1);
+	@Override
+	public EmployeePayrollData getEmployeePayrollDataById(int empId) throws EmployeePayrollException {
+		try {
+			return employeeRepository.findById(empId).get();
+		} catch (Exception e) {
+			throw new EmployeePayrollException("Employee not foundd");
+		}
 	}
 
 	@Override
 	public List<EmployeePayrollData> getEmployeesByDepartment(String department) {
-		// TODO Auto-generated method stub
-		return null;
+		return employeeRepository.findEmployeesByDepartment(department);
 	}
+
+	@Override
+	public EmployeePayrollData updateEmployeePayrollData(int empId, EmployeePayrollDTO empPayrollDTO) {
+		Optional<EmployeePayrollData> empData = null;
+		empData = employeeRepository.findById(empId);
+		EmployeePayrollData empObj = null;
+		if (empData.isPresent()) {
+			empObj = empData.get();
+		}
+		empObj.setName(empPayrollDTO.name);
+		empObj.setSalary(empPayrollDTO.salary);
+		employeeRepository.save(empObj);
+		return empObj;
+	}
+
+	@Override
+	public void deleteEmployeePayrolllData(int empId) {
+		employeeRepository.deleteById(empId);
+	}
+
 }

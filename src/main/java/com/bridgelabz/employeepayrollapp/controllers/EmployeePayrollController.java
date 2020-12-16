@@ -34,44 +34,42 @@ import lombok.extern.slf4j.Slf4j;
 public class EmployeePayrollController {
 
 	@Autowired
-	private EmployeeRepository employeeRepository;
+	private IEmployeePayrollService employeePayrollService;
 
-	@PostMapping(path = "/add") // Map ONLY POST Requests
+	@PostMapping(path = "/add")
 	public ResponseEntity<ResponseDTO> addNewEmployee(@Valid @RequestBody EmployeePayrollDTO empPayrollDTO) {
-
 		log.debug("Employee DTO ===== > " + empPayrollDTO.toString());
-
 		EmployeePayrollData empData = null;
-		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		empData = employeePayrollService.createEmployeePayrollData(empPayrollDTO);
 		ResponseDTO respDTO = new ResponseDTO("Created employee payroll data successfully", empData);
-		employeeRepository.save(empData);
 		return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
 	}
 
 	@GetMapping(path = "/all")
-	public @ResponseBody Iterable<EmployeePayrollData> getAllEmployees() {
-		return employeeRepository.findAll();
+	public ResponseEntity<ResponseDTO> getAllEmployees() {
+		List<EmployeePayrollData> employeeDataList = null;
+		employeeDataList = employeePayrollService.getEmployeePayrollData();
+		ResponseDTO responseDTO = new ResponseDTO("Get Call Successfull", employeeDataList);
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 	@GetMapping(value = { "", "/", "/get" })
-	public @ResponseBody Iterable<EmployeePayrollData> getEmployeePayrollData() {
-		return employeeRepository.findAll();
+	public ResponseEntity<ResponseDTO> getEmployeePayrollData() {
+		List<EmployeePayrollData> employeeDataList = null;
+		employeeDataList = employeePayrollService.getEmployeePayrollData();
+		ResponseDTO responseDTO = new ResponseDTO("Get Call Successfull", employeeDataList);
+		return new ResponseEntity<ResponseDTO>(responseDTO, HttpStatus.OK);
 	}
 
 	@GetMapping("/get/{empId}")
 	public @ResponseBody EmployeePayrollData getEmployeePayrollData(@PathVariable("empId") int empId) {
-		try {
-			return employeeRepository.findById(empId).get();
-		} catch (Exception e) {
-			throw new EmployeePayrollException("Employee not foundd");
-		}
+		return employeePayrollService.getEmployeePayrollDataById(empId);
 	}
 
 	@GetMapping("/get/department/{department}")
 	public ResponseEntity<ResponseDTO> getEmployeePayrollData(@PathVariable("department") String department) {
 		List<EmployeePayrollData> empDataList = null;
-		empDataList = employeeRepository.findEmployeesByDepartment(department);
+		empDataList = employeePayrollService.getEmployeesByDepartment(department);
 		ResponseDTO respDTO = new ResponseDTO("Retrieved data successfully", empDataList);
 		return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
 	}
@@ -79,24 +77,15 @@ public class EmployeePayrollController {
 	@PutMapping("/update/{empId}")
 	public ResponseEntity<ResponseDTO> updateEmployeePayrollData(@PathVariable("empId") int empId,
 			@Valid @RequestBody EmployeePayrollDTO employeePayrollDTO) {
-		Optional<EmployeePayrollData> empData = null;
-		empData = employeeRepository.findById(empId);
-		EmployeePayrollData empObj = null;
-		if (empData.isPresent()) {
-			empObj = empData.get();
-		}
-		empObj.setName(employeePayrollDTO.name);
-		empObj.setSalary(employeePayrollDTO.salary);
-		employeeRepository.save(empObj);
+		EmployeePayrollData empData = employeePayrollService.updateEmployeePayrollData(empId, employeePayrollDTO);
 		ResponseDTO respDTO = new ResponseDTO("Update Call Successfull---> ", empData);
 		return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
 	}
 
 	@DeleteMapping("/delete/{empId}")
 	public ResponseEntity<ResponseDTO> deleteEmployeePayrollData(@PathVariable("empId") int empId) {
-		employeeRepository.deleteById(empId);
+		employeePayrollService.deleteEmployeePayrolllData(empId);
 		ResponseDTO respDTO = new ResponseDTO("Delete Call Successfull---> ", "Delete Id: " + empId);
 		return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
 	}
-
 }
