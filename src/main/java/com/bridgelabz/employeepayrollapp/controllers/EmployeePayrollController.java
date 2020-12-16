@@ -26,8 +26,11 @@ import com.bridgelabz.employeepayrollapp.repository.UserRepository;
 import com.bridgelabz.employeepayrollapp.services.EmployeePayrollService;
 import com.bridgelabz.employeepayrollapp.services.IEmployeePayrollService;
 
+import lombok.extern.slf4j.Slf4j;
+
 @RestController
 @RequestMapping("/employeepayrollservice")
+@Slf4j
 public class EmployeePayrollController {
 
 	private List<EmployeePayrollData> employeeDataList = new ArrayList<>();
@@ -47,6 +50,9 @@ public class EmployeePayrollController {
 
 	@PostMapping(path = "/add") // Map ONLY POST Requests
 	public ResponseEntity<ResponseDTO> addNewEmployee(@Valid @RequestBody EmployeePayrollDTO empPayrollDTO) {
+		
+		log.debug("Employee DTO ===== > " + empPayrollDTO.toString());
+		
 		EmployeePayrollData empData = null;
 		EmployeePayrollService employeePayrollService = new EmployeePayrollService();
 		empData = employeePayrollService.createEmployeePayrollData(empPayrollDTO);

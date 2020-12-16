@@ -1,5 +1,8 @@
 package com.bridgelabz.employeepayrollapp.model;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -9,8 +12,10 @@ import javax.validation.constraints.Pattern;
 
 import com.bridgelabz.employeepayrollapp.dto.*;
 
+import lombok.Data;
+
 @Entity
-public class EmployeePayrollData {
+public @Data class EmployeePayrollData {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,8 +24,25 @@ public class EmployeePayrollData {
 	private String name;
 	private long salary;
 
+	private String gender;
+	private LocalDate startDate;
+	private String note;
+	private String profilePic;
+	private String departments;
+
 	public EmployeePayrollData() {
 
+	}
+
+	private void updateEmployeePayrollData(EmployeePayrollDTO empPayrollDTO) {
+		// TODO Auto-generated method stub
+		this.name = empPayrollDTO.name;
+		this.salary = empPayrollDTO.salary;
+		this.gender = empPayrollDTO.gender;
+		this.note = empPayrollDTO.note;
+		this.startDate = empPayrollDTO.startDate;
+		this.profilePic = empPayrollDTO.profilePic;
+		this.departments = empPayrollDTO.departments;
 	}
 
 	public EmployeePayrollData(String name, long salary) {
@@ -30,33 +52,6 @@ public class EmployeePayrollData {
 
 	public EmployeePayrollData(int i, EmployeePayrollDTO empPayrollDTO) {
 		// TODO Auto-generated constructor stub
-		this.name = empPayrollDTO.name;
-		this.salary = empPayrollDTO.salary;
-
+		this.updateEmployeePayrollData(empPayrollDTO);
 	}
-
-	public Integer getEmployeeId() {
-		return employeeId;
-	}
-
-	public void setEmployeeId(Integer employeeId) {
-		this.employeeId = employeeId;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public long getSalary() {
-		return salary;
-	}
-
-	public void setSalary(long salary) {
-		this.salary = salary;
-	}
-
 }
