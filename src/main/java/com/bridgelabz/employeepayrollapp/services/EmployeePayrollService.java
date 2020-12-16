@@ -18,9 +18,6 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
 	private List<EmployeePayrollData> employeePayrollList = new ArrayList<>();
 
-	@Autowired
-	private EmployeeRepository employeeRepository;
-
 	public List<EmployeePayrollData> getEmployeePayrollData() {
 		return employeePayrollList;
 	}
@@ -48,5 +45,11 @@ public class EmployeePayrollService implements IEmployeePayrollService {
 
 	public void deleteEmployeePayrolllData(int empId) {
 		employeePayrollList.remove(empId - 1);
+	}
+
+	@Override
+	public List<EmployeePayrollData> getEmployeesByDepartment(String department) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

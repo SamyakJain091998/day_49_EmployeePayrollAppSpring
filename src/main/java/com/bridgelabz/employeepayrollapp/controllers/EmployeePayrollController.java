@@ -68,6 +68,14 @@ public class EmployeePayrollController {
 		}
 	}
 
+	@GetMapping("/get/department/{department}")
+	public ResponseEntity<ResponseDTO> getEmployeePayrollData(@PathVariable("department") String department) {
+		List<EmployeePayrollData> empDataList = null;
+		empDataList = employeeRepository.findEmployeesByDepartment(department);
+		ResponseDTO respDTO = new ResponseDTO("Retrieved data successfully", empDataList);
+		return new ResponseEntity<ResponseDTO>(respDTO, HttpStatus.OK);
+	}
+
 	@PutMapping("/update/{empId}")
 	public ResponseEntity<ResponseDTO> updateEmployeePayrollData(@PathVariable("empId") int empId,
 			@Valid @RequestBody EmployeePayrollDTO employeePayrollDTO) {
