@@ -3,10 +3,14 @@ package com.bridgelabz.employeepayrollapp.model;
 import java.time.LocalDate;
 import java.util.List;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.Pattern;
 
@@ -28,14 +32,17 @@ public @Data class EmployeePayrollData {
 	private LocalDate startDate;
 	private String note;
 	private String profilePic;
-	private String departments;
+
+	@ElementCollection
+	@CollectionTable(name = "employee_department", joinColumns = @JoinColumn(name = "id"))
+	@Column(name = "department")
+	private List<String> departments;
 
 	public EmployeePayrollData() {
 
 	}
 
 	private void updateEmployeePayrollData(EmployeePayrollDTO empPayrollDTO) {
-		// TODO Auto-generated method stub
 		this.name = empPayrollDTO.name;
 		this.salary = empPayrollDTO.salary;
 		this.gender = empPayrollDTO.gender;
@@ -50,8 +57,7 @@ public @Data class EmployeePayrollData {
 		this.salary = salary;
 	}
 
-	public EmployeePayrollData(int i, EmployeePayrollDTO empPayrollDTO) {
-		// TODO Auto-generated constructor stub
+	public EmployeePayrollData(EmployeePayrollDTO empPayrollDTO) {
 		this.updateEmployeePayrollData(empPayrollDTO);
 	}
 }

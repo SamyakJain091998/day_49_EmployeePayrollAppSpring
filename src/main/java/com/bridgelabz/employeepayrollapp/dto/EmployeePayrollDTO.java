@@ -36,11 +36,10 @@ public @ToString class EmployeePayrollDTO {
 	public String profilePic;
 
 	@NotNull(message = "departments shouldn't be empty")
-	public String departments;
+	public List<String> departments;
 
 	public EmployeePayrollDTO(String name, long salary) {
 		this.name = name;
 		this.salary = salary;
 	}
-	//
 }
